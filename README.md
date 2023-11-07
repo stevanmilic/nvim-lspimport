@@ -1,6 +1,6 @@
 # LSP Import
 
-Resolves imports for undefiend terms by using LSP completion API. It's primary
+Resolves imports for undefined terms by using LSP completion API. It's primary
 usage is to support automatic imports for `pyright` language server.
 
 Currently tested on neovim **nightly** only.
