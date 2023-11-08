@@ -3,7 +3,7 @@
 Resolves imports for undefined terms by using LSP completion API. It's primary
 usage is to support automatic imports for `pyright` language server.
 
-https://github.com/stevanmilic/lsp-import/assets/6879030/0699c307-b566-4bc3-af7d-858b39bf8a83
+https://github.com/stevanmilic/nvim-lspimport/assets/6879030/5a7868e8-e09b-41e2-a5ec-bd2eacb9c1e0
 
 Currently tested on neovim **nightly** only.
 
