@@ -1,5 +1,5 @@
 local ms = require("vim.lsp.protocol").Methods
-local servers = require("lsp-import.servers")
+local servers = require("lspimport.servers")
 
 local LspImport = {}
 
