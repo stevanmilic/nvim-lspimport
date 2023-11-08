@@ -1,6 +1,6 @@
 local M = {}
 
----@class lsp-import.Server
+---@class lspimport.Server
 ---@field is_unresolved_import_error fun(diagnostic: Diagnostic): boolean
 ---@field is_auto_import_completion_item fun(item: any): boolean
 
@@ -27,7 +27,7 @@ end
 
 ---Returns a server class.
 ---@param diagnostic Diagnostic
----@return lsp-import.Server|nil
+---@return lspimport.Server|nil
 function M.get_server(diagnostic)
     if diagnostic.source == "Pyright" then
         return pyright_server()

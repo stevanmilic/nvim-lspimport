@@ -20,7 +20,7 @@ local get_unresolved_import_errors = function()
     end, diagnostics)
 end
 
----@param server lsp-import.Server
+---@param server lspimport.Server
 ---@param result lsp.CompletionList|lsp.CompletionItem[] Result of `textDocument/completion`
 ---@param unresolved_import string
 ---@return table[]
@@ -49,7 +49,7 @@ local format_import = function(item)
     return item.abbr .. " " .. item.kind .. " " .. item.user_data.nvim.lsp.completion_item.labelDetails.description
 end
 
----@param server lsp-import.Server
+---@param server lspimport.Server
 ---@param result lsp.CompletionList|lsp.CompletionItem[] Result of `textDocument/completion`
 ---@param unresolved_import string
 local lsp_completion_handler = function(server, result, unresolved_import)
