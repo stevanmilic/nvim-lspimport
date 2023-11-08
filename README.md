@@ -3,7 +3,7 @@
 Resolves imports for undefined terms by using LSP completion API. It's primary
 usage is to support automatic imports for `pyright` language server.
 
-![lsp-import](https://github.com/stevanmilic/lsp-import/assets/6879030/458df24e-09b4-495a-8caf-d500a9bb1bcc)
+https://github.com/stevanmilic/lsp-import/assets/6879030/0699c307-b566-4bc3-af7d-858b39bf8a83
 
 Currently tested on neovim **nightly** only.
 
