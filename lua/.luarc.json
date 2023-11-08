@@ -1,8 +1,0 @@
-{
-    "workspace.library": [
-        "/Users/Stevan.Milic/.local/share/nvim/lazy/neodev.nvim/types/nightly",
-        "/opt/homebrew/Cellar/neovim/HEAD-c1a05f6/share/nvim/runtime/lua",
-        "/Users/Stevan.Milic/Applications/lsp-import.nvim/lua",
-        "${3rd}/luv/library"
-    ]
-}
