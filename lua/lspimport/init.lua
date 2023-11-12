@@ -32,7 +32,13 @@ local get_auto_import_complete_items = function(server, result, unresolved_impor
         return {}
     end
     return vim.tbl_filter(function(item)
-        return item.word == unresolved_import and server.is_auto_import_completion_item(item)
+        return item.word == unresolved_import
+            and item.user_data
+            and item.user_data.nvim
+            and item.user_data.nvim.lsp.completion_item
+            and item.user_data.nvim.lsp.completion_item.labelDetails
+            and item.user_data.nvim.lsp.completion_item.labelDetails.description
+            and server.is_auto_import_completion_item(item)
     end, items)
 end
 
