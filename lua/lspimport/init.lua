@@ -20,6 +20,19 @@ local get_unresolved_import_errors = function()
     end, diagnostics)
 end
 
+---@param diagnostics Diagnostic[]
+---@return Diagnostic|nil
+local get_diagnostic_under_cursor = function(diagnostics)
+    local cursor = vim.api.nvim_win_get_cursor(0)
+    local row, col = cursor[1] - 1, cursor[2]
+    for _, d in ipairs(diagnostics) do
+        if d.lnum <= row and d.col <= col and d.end_lnum >= row and d.end_col >= col then
+            return d
+        end
+    end
+    return nil
+end
+
 ---@param server lspimport.Server
 ---@param result lsp.CompletionList|lsp.CompletionItem[] Result of `textDocument/completion`
 ---@param unresolved_import string
@@ -114,7 +127,8 @@ LspImport.import = function()
             vim.notify("no unresolved import error")
             return
         end
-        lsp_completion(diagnostics[1])
+        local diagnostic = get_diagnostic_under_cursor(diagnostics)
+        lsp_completion(diagnostic or diagnostics[1])
     end)
 end
 
