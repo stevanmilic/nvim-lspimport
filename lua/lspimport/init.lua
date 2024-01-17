@@ -5,8 +5,7 @@ local LspImport = {}
 
 ---@return Diagnostic[]
 local get_unresolved_import_errors = function()
-    local line, _ = unpack(vim.api.nvim_win_get_cursor(0))
-    local diagnostics = vim.diagnostic.get(0, { lnum = line - 1, severity = vim.diagnostic.severity.ERROR })
+    local diagnostics = vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR })
     if vim.tbl_isempty(diagnostics) then
         return {}
     end
@@ -18,19 +17,6 @@ local get_unresolved_import_errors = function()
         end
         return server.is_unresolved_import_error(diagnostic)
     end, diagnostics)
-end
-
----@param diagnostics Diagnostic[]
----@return Diagnostic|nil
-local get_diagnostic_under_cursor = function(diagnostics)
-    local cursor = vim.api.nvim_win_get_cursor(0)
-    local row, col = cursor[1] - 1, cursor[2]
-    for _, d in ipairs(diagnostics) do
-        if d.lnum <= row and d.col <= col and d.end_lnum >= row and d.end_col >= col then
-            return d
-        end
-    end
-    return nil
 end
 
 ---@param server lspimport.Server
@@ -127,8 +113,9 @@ LspImport.import = function()
             vim.notify("no unresolved import error")
             return
         end
-        local diagnostic = get_diagnostic_under_cursor(diagnostics)
-        lsp_completion(diagnostic or diagnostics[1])
+        for _, diagnostic in ipairs(diagnostics) do
+            lsp_completion(diagnostic)
+        end
     end)
 end
 

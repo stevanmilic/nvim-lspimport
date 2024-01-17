@@ -17,14 +17,13 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
 
 ## Configuration
 
-Mappings are not set by default, hence it's required to set a mapping for resolving import:
+Mappings are not set by default, hence it's required to set a mapping for resolving imports:
 
 ```lua
 vim.keymap.set("n", "<leader>a", require("lspimport").import, { noremap = true })
 ```
 
-Once mapping is set, jump on the line with an undefined term and execute
-mapping to resolve import.
+Once mapping is set, execute mapping to resolve imports in the current buffer.
 
 ## Supported language servers
 
