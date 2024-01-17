@@ -5,8 +5,6 @@ usage is to support automatic imports for `pyright` language server.
 
 https://github.com/stevanmilic/nvim-lspimport/assets/6879030/5a7868e8-e09b-41e2-a5ec-bd2eacb9c1e0
 
-Currently tested on neovim **nightly** only.
-
 ## Installation
 
 Using [lazy.nvim](https://github.com/folke/lazy.nvim):
