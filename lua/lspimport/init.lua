@@ -1,4 +1,3 @@
-local ms = require("vim.lsp.protocol").Methods
 local servers = require("lspimport.servers")
 
 local LspImport = {}
@@ -38,9 +37,7 @@ end
 ---@param unresolved_import string
 ---@return table[]
 local get_auto_import_complete_items = function(server, result, unresolved_import)
-    -- TODO: use vim.lsp.util.text_document_completion_list_to_complete_items
-    -- once stabilized on nvim API.
-    local items = require("vim.lsp._completion")._lsp_to_complete_items(result, unresolved_import)
+    local items = require("vim.lsp.util").text_document_completion_list_to_complete_items(result, unresolved_import)
     if vim.tbl_isempty(items) then
         return {}
     end
@@ -115,7 +112,7 @@ local lsp_completion = function(diagnostic)
         textDocument = vim.lsp.util.make_text_document_params(0),
         position = { line = diagnostic.lnum, character = diagnostic.end_col },
     }
-    return vim.lsp.buf_request(0, ms.textDocument_completion, params, function(_, result)
+    return vim.lsp.buf_request(0, "textDocument/completion", params, function(_, result)
         lsp_completion_handler(server, result, unresolved_import[1])
     end)
 end
