@@ -38,6 +38,7 @@ end
 ---@return table[]
 local get_auto_import_complete_items = function(server, result, unresolved_import)
     -- TODO: use another function once it is deprecated in 0.10
+    -- See: https://neovim.io/doc/user/deprecated.html#vim.lsp.util.text_document_completion_list_to_complete_items()
     local items = require("vim.lsp.util").text_document_completion_list_to_complete_items(result, unresolved_import)
     if vim.tbl_isempty(items) then
         return {}
