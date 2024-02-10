@@ -2,14 +2,14 @@ local servers = require("lspimport.servers")
 
 local LspImport = {}
 
----@return Diagnostic[]
+---@return vim.Diagnostic[]
 local get_unresolved_import_errors = function()
     local line, _ = unpack(vim.api.nvim_win_get_cursor(0))
     local diagnostics = vim.diagnostic.get(0, { lnum = line - 1, severity = vim.diagnostic.severity.ERROR })
     if vim.tbl_isempty(diagnostics) then
         return {}
     end
-    ---@param diagnostic Diagnostic
+    ---@param diagnostic vim.Diagnostic
     return vim.tbl_filter(function(diagnostic)
         local server = servers.get_server(diagnostic)
         if server == nil then
@@ -19,8 +19,8 @@ local get_unresolved_import_errors = function()
     end, diagnostics)
 end
 
----@param diagnostics Diagnostic[]
----@return Diagnostic|nil
+---@param diagnostics vim.Diagnostic[]
+---@return vim.Diagnostic|nil
 local get_diagnostic_under_cursor = function(diagnostics)
     local cursor = vim.api.nvim_win_get_cursor(0)
     local row, col = cursor[1] - 1, cursor[2]
@@ -50,6 +50,8 @@ local get_auto_import_complete_items = function(server, result, unresolved_impor
             and item.user_data.nvim.lsp.completion_item
             and item.user_data.nvim.lsp.completion_item.labelDetails
             and item.user_data.nvim.lsp.completion_item.labelDetails.description
+            and item.user_data.nvim.lsp.completion_item.additionalTextEdits
+            and not vim.tbl_isempty(item.user_data.nvim.lsp.completion_item.additionalTextEdits)
             and server.is_auto_import_completion_item(item)
     end, items)
 end
@@ -59,7 +61,8 @@ local resolve_import = function(item)
     if item == nil then
         return
     end
-    vim.lsp.util.apply_text_edits(item.user_data.nvim.lsp.completion_item.additionalTextEdits, 0, "utf-8")
+    local text_edits = item.user_data.nvim.lsp.completion_item.additionalTextEdits
+    vim.lsp.util.apply_text_edits(text_edits, 0, "utf-8")
 end
 
 ---@param item any
@@ -91,7 +94,7 @@ local lsp_completion_handler = function(server, result, unresolved_import)
     end
 end
 
----@param diagnostic Diagnostic
+---@param diagnostic vim.Diagnostic
 local lsp_completion = function(diagnostic)
     local unresolved_import = vim.api.nvim_buf_get_text(
         diagnostic.bufnr,
