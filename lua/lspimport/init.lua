@@ -57,12 +57,13 @@ local get_auto_import_complete_items = function(server, result, unresolved_impor
 end
 
 ---@param item any|nil
-local resolve_import = function(item)
+---@param bufnr integer
+local resolve_import = function(item, bufnr)
     if item == nil then
         return
     end
     local text_edits = item.user_data.nvim.lsp.completion_item.additionalTextEdits
-    vim.lsp.util.apply_text_edits(text_edits, 0, "utf-8")
+    vim.lsp.util.apply_text_edits(text_edits, bufnr, "utf-8")
 end
 
 ---@param item any
@@ -73,7 +74,8 @@ end
 ---@param server lspimport.Server
 ---@param result lsp.CompletionList|lsp.CompletionItem[] Result of `textDocument/completion`
 ---@param unresolved_import string
-local lsp_completion_handler = function(server, result, unresolved_import)
+---@param bufnr integer
+local lsp_completion_handler = function(server, result, unresolved_import, bufnr)
     if vim.tbl_isempty(result or {}) then
         vim.notify("no import found for " .. unresolved_import)
         return
@@ -84,12 +86,14 @@ local lsp_completion_handler = function(server, result, unresolved_import)
         return
     end
     if #items == 1 then
-        resolve_import(items[1])
+        resolve_import(items[1], bufnr)
     else
         vim.ui.select(
             items,
             { prompt = "Select Import For " .. unresolved_import, format_item = format_import },
-            resolve_import
+            function(item, _)
+                resolve_import(item, bufnr)
+            end
         )
     end
 end
@@ -118,7 +122,7 @@ local lsp_completion = function(diagnostic)
         position = { line = diagnostic.lnum, character = diagnostic.end_col },
     }
     return vim.lsp.buf_request(0, "textDocument/completion", params, function(_, result)
-        lsp_completion_handler(server, result, unresolved_import[1])
+        lsp_completion_handler(server, result, unresolved_import[1], diagnostic.bufnr)
     end)
 end
 
