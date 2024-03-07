@@ -32,14 +32,25 @@ local get_diagnostic_under_cursor = function(diagnostics)
     return nil
 end
 
+---@param result vim.lsp.CompletionResult Result of `textDocument/completion`
+---@param prefix string prefix to filter the completion items
+---@return table[]
+local lsp_to_complete_items = function(result, prefix)
+    if vim.fn.has("nvim-0.10.0") == 1 then
+        -- TODO: use another function once it's available in public API.
+        -- See: https://neovim.io/doc/user/deprecated.html#vim.lsp.util.text_document_completion_list_to_complete_items()
+        return vim.lsp._completion._lsp_to_complete_items(result, prefix)
+    else
+        return require("vim.lsp.util").text_document_completion_list_to_complete_items(result, prefix)
+    end
+end
+
 ---@param server lspimport.Server
 ---@param result lsp.CompletionList|lsp.CompletionItem[] Result of `textDocument/completion`
 ---@param unresolved_import string
 ---@return table[]
 local get_auto_import_complete_items = function(server, result, unresolved_import)
-    -- TODO: use another function once it is deprecated in 0.10
-    -- See: https://neovim.io/doc/user/deprecated.html#vim.lsp.util.text_document_completion_list_to_complete_items()
-    local items = require("vim.lsp.util").text_document_completion_list_to_complete_items(result, unresolved_import)
+    local items = lsp_to_complete_items(result, unresolved_import)
     if vim.tbl_isempty(items) then
         return {}
     end
