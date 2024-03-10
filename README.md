@@ -31,3 +31,6 @@ mapping to resolve import.
 NOTE: In order for `pyright` to resolve an import, module containing it should
 be used in the workspace; otherwise import won't be found. Hence the
 auto-import feature works well in modules loaded with pre-loaded imports.
+[Auto-imports are limited to only those symbols and modules that have been
+imported somehwhere else in the
+program.](https://github.com/microsoft/pyright/issues/967#issuecomment-679417083)

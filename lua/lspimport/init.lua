@@ -132,7 +132,7 @@ local lsp_completion = function(diagnostic)
         textDocument = vim.lsp.util.make_text_document_params(0),
         position = { line = diagnostic.lnum, character = diagnostic.end_col },
     }
-    return vim.lsp.buf_request(0, "textDocument/completion", params, function(_, result)
+    return vim.lsp.buf_request(diagnostic.bufnr, "textDocument/completion", params, function(_, result)
         lsp_completion_handler(server, result, unresolved_import[1], diagnostic.bufnr)
     end)
 end
