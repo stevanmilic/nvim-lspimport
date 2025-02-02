@@ -54,14 +54,14 @@ local get_auto_import_complete_items = function(server, result, unresolved_impor
     if vim.tbl_isempty(items) then
         return {}
     end
+
     return vim.tbl_filter(function(item)
         return item.word == unresolved_import
             and item.user_data
             and item.user_data.nvim
             and item.user_data.nvim.lsp.completion_item
-            and item.user_data.nvim.lsp.completion_item.labelDetails
-            and item.user_data.nvim.lsp.completion_item.labelDetails.description
-            and item.user_data.nvim.lsp.completion_item.additionalTextEdits
+            and item.user_data.nvim.lsp.completion_item.data
+            and item.user_data.nvim.lsp.completion_item.data.autoImportText
             and not vim.tbl_isempty(item.user_data.nvim.lsp.completion_item.additionalTextEdits)
             and server.is_auto_import_completion_item(item)
     end, items)
@@ -79,7 +79,10 @@ end
 
 ---@param item any
 local format_import = function(item)
-    return item.abbr .. " " .. item.kind .. " " .. item.user_data.nvim.lsp.completion_item.labelDetails.description
+    local suggested_import = vim.fn.trim(item.user_data.nvim.lsp.completion_item.data.autoImportText, "```")
+    local item_info = string.format("%s [%s]", item.abbr, item.kind)
+
+    return string.format("%-20s %s", item_info, suggested_import)
 end
 
 ---@param server lspimport.Server
