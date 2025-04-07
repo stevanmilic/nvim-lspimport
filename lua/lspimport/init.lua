@@ -36,7 +36,9 @@ end
 ---@param prefix string prefix to filter the completion items
 ---@return table[]
 local lsp_to_complete_items = function(result, prefix)
-    if vim.fn.has("nvim-0.10.0") == 1 then
+    if vim.fn.has("nvim-0.11.0") == 1 then
+        return vim.lsp.completion._lsp_to_complete_items(result, prefix)
+    elseif vim.fn.has("nvim-0.10.0") == 1 then
         -- TODO: use another function once it's available in public API.
         -- See: https://neovim.io/doc/user/deprecated.html#vim.lsp.util.text_document_completion_list_to_complete_items()
         return vim.lsp._completion._lsp_to_complete_items(result, prefix)
