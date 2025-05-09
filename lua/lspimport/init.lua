@@ -101,9 +101,16 @@ local lsp_completion_handler = function(server, result, unresolved_import, bufnr
     if #items == 1 then
         resolve_import(items[1], bufnr)
     else
+        select_options = {
+            prompt = "elect Import For " .. unresolved_import,
+            format_item = format_import,
+        }
+        if LspImport.cfg.select_config then
+            select_options = vim.tbl_deep_extend("force", select_options, LspImport.cfg.select_config)
+        end
         vim.ui.select(
             items,
-            { prompt = "Select Import For " .. unresolved_import, format_item = format_import },
+            select_options,
             function(item, _)
                 resolve_import(item, bufnr)
             end
@@ -150,5 +157,9 @@ LspImport.import = function()
         lsp_completion(diagnostic or diagnostics[1])
     end)
 end
+
+LspImport.cfg = {
+  select_config = {},
+}
 
 return LspImport
